@@ -1,4 +1,7 @@
 import clsx from 'clsx'
+import type { Spec } from '@json-render/core'
+import { Renderer, JSONUIProvider } from '@json-render/react'
+import { registry } from '@/renderer/registry'
 
 function SkeletonPlaceholder() {
     return (
@@ -21,12 +24,13 @@ function SkeletonPlaceholder() {
 }
 
 interface RenderViewportProps {
-    spec?: unknown | null
+    spec?: Spec | null
     loading?: boolean
 }
 
 export function RenderViewport({
-    spec
+    spec,
+    loading
 }: RenderViewportProps) {
     if (!spec) {
         return (
@@ -38,7 +42,9 @@ export function RenderViewport({
     return (
         <div className="flex-1 overflow-auto bg-white relative">
             <div className="p-6">
-                {/* <Renderer spec={spec} /> */}
+                <JSONUIProvider registry={registry}>
+                    <Renderer spec={spec} registry={registry} loading={loading} />
+                </JSONUIProvider>
             </div>
         </div>
     )
