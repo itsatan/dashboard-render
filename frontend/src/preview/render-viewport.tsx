@@ -148,10 +148,6 @@ export function RenderViewport({
     )
 }
 
-/* ------------------------------------------------------------------ */
-/*  Welcome Placeholder – Architectural Blueprint Style               */
-/* ------------------------------------------------------------------ */
-
 const CAPABILITY_CHIPS = [
     'Grid', 'Flex', 'Card', 'MetricCard', 'Chart', 'StatusDot',
 ] as const

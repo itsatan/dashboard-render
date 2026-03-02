@@ -1,10 +1,13 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useUIStream } from '@json-render/react'
+import { nanoid } from 'nanoid'
 import { Header } from '@/header/header'
 import { Sidebar } from '@/sidebar/sidebar'
 import { PreviewPanel } from '@/preview/preview-panel'
 
 export function App() {
+
+    const [shareId, setShareId] = useState(() => nanoid(8))
 
     const { spec: streamSpec, isStreaming, error, send } = useUIStream({
         api: '/api/generate',
@@ -12,8 +15,20 @@ export function App() {
     })
 
     const onGenerate = useCallback(async (prompt: string) => {
+        setShareId(nanoid(8))
         await send(prompt)
     }, [send])
+
+    const prevIsStreamingRef = useRef(isStreaming)
+
+    useEffect(() => {
+        if (prevIsStreamingRef.current && !isStreaming && streamSpec && Object.keys(streamSpec.elements).length > 0) {
+            localStorage.setItem(shareId, JSON.stringify(streamSpec))
+        }
+        prevIsStreamingRef.current = isStreaming
+    }, [isStreaming, streamSpec, shareId])
+
+    const shareUrl = `${window.location.origin}/s/${shareId}`
 
     const engineStatus = isStreaming ? 'loading' as const : error ? 'error' as const : 'ready' as const
 
@@ -25,7 +40,7 @@ export function App() {
                     onGenerate={onGenerate}
                     isGenerating={isStreaming}
                 />
-                <PreviewPanel spec={streamSpec} loading={isStreaming} />
+                <PreviewPanel spec={streamSpec} loading={isStreaming} shareUrl={shareUrl} />
             </main>
         </div>
     )
