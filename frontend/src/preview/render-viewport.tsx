@@ -45,16 +45,14 @@ function SkeletonPlaceholder() {
                             <div className="h-2.5 w-10 rounded-full bg-zinc-100" />
                         </div>
                     </div>
-                    {/* faux chart lines */}
-                    <div className="flex-1 flex flex-col justify-end gap-[6px] pb-2">
-                        {[65, 45, 80, 35, 55, 70, 40].map((w, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                                <div className="h-[1px] bg-zinc-100 flex-1" />
-                                <div
-                                    className="h-[3px] rounded-full bg-indigo-200/25"
-                                    style={{ width: `${w}%` }}
-                                />
-                            </div>
+                    {/* faux chart area */}
+                    <div className="flex-1 flex items-end gap-2 min-h-0 pb-1">
+                        {[45, 70, 35, 60, 80, 50, 40, 65, 55, 75, 38, 58].map((h, i) => (
+                            <div
+                                key={i}
+                                className="flex-1 rounded-sm bg-zinc-100/80"
+                                style={{ height: `${h}%` }}
+                            />
                         ))}
                     </div>
                     {/* axis ticks */}
