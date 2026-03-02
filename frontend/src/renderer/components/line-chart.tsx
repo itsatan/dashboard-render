@@ -69,6 +69,7 @@ export function LineChart({ props }: BaseComponentProps<LineChartProps>) {
             },
             xAxis: {
                 type: 'category',
+                boundaryGap: false,
                 data: props.xAxis,
                 axisLine: { lineStyle: { color: '#e4e4e7' } },
                 axisTick: { show: false },

@@ -33,7 +33,7 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
         unit?: string (单位),
         trend?: "up" | "down" | "flat" (趋势方向),
         trendValue?: string (趋势数值如"+12%"),
-        color: "default" | "blue" | "green" | "red" | "amber" (默认"default")
+        color: "default" | "blue" | "green" | "red" | "amber" (默认"default"，除非用户明确要求彩色，否则始终使用"default")
     }
 
 5. ChartPlaceholder - 图表占位区域（当无法提供具体数据时使用）
@@ -109,9 +109,9 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 {"op":"add","path":"/elements/dashboard","value":{"type":"Flex","props":{"direction":"col","gap":6},"children":["title","metrics-grid","charts-grid"]}}
 {"op":"add","path":"/elements/title","value":{"type":"SectionTitle","props":{"title":"服务器监控仪表盘","description":"实时监控服务器核心指标"}}}
 {"op":"add","path":"/elements/metrics-grid","value":{"type":"Grid","props":{"columns":4,"gap":4},"children":["cpu-metric","mem-metric","disk-metric","net-metric"]}}
-{"op":"add","path":"/elements/cpu-metric","value":{"type":"MetricCard","props":{"label":"CPU 使用率","value":"67%","trend":"up","trendValue":"+5%","color":"blue"}}}
-{"op":"add","path":"/elements/mem-metric","value":{"type":"MetricCard","props":{"label":"内存占用","value":"8.2GB","unit":"/ 16GB","trend":"flat","color":"green"}}}
-{"op":"add","path":"/elements/disk-metric","value":{"type":"MetricCard","props":{"label":"磁盘空间","value":"256GB","unit":"/ 512GB","trend":"up","trendValue":"+2%","color":"amber"}}}
+{"op":"add","path":"/elements/cpu-metric","value":{"type":"MetricCard","props":{"label":"CPU 使用率","value":"67%","trend":"up","trendValue":"+5%","color":"default"}}}
+{"op":"add","path":"/elements/mem-metric","value":{"type":"MetricCard","props":{"label":"内存占用","value":"8.2GB","unit":"/ 16GB","trend":"flat","color":"default"}}}
+{"op":"add","path":"/elements/disk-metric","value":{"type":"MetricCard","props":{"label":"磁盘空间","value":"256GB","unit":"/ 512GB","trend":"up","trendValue":"+2%","color":"default"}}}
 {"op":"add","path":"/elements/net-metric","value":{"type":"MetricCard","props":{"label":"网络流量","value":"1.2Gbps","trend":"down","trendValue":"-8%","color":"default"}}}
 {"op":"add","path":"/elements/charts-grid","value":{"type":"Grid","props":{"columns":2,"gap":4},"children":["cpu-chart","net-chart"]}}
 {"op":"add","path":"/elements/cpu-chart","value":{"type":"LineChart","props":{"title":"CPU 使用率趋势","xAxis":["00:00","04:00","08:00","12:00","16:00","20:00","24:00"],"series":[{"name":"CPU","data":[32,28,45,67,72,58,43]}],"height":"lg","smooth":true,"showArea":true}}}
@@ -123,10 +123,10 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 {"op":"add","path":"/elements/ecommerce","value":{"type":"Flex","props":{"direction":"col","gap":6},"children":["header","kpi-row","chart-section"]}}
 {"op":"add","path":"/elements/header","value":{"type":"SectionTitle","props":{"title":"电商运营数据概览","description":"今日核心业务指标与趋势分析"}}}
 {"op":"add","path":"/elements/kpi-row","value":{"type":"Grid","props":{"columns":4,"gap":4},"children":["order-kpi","revenue-kpi","avg-kpi","refund-kpi"]}}
-{"op":"add","path":"/elements/order-kpi","value":{"type":"MetricCard","props":{"label":"今日订单","value":"3,842","trend":"up","trendValue":"+15%","color":"blue"}}}
-{"op":"add","path":"/elements/revenue-kpi","value":{"type":"MetricCard","props":{"label":"销售额","value":"¥128.5万","trend":"up","trendValue":"+8%","color":"green"}}}
+{"op":"add","path":"/elements/order-kpi","value":{"type":"MetricCard","props":{"label":"今日订单","value":"3,842","trend":"up","trendValue":"+15%","color":"default"}}}
+{"op":"add","path":"/elements/revenue-kpi","value":{"type":"MetricCard","props":{"label":"销售额","value":"¥128.5万","trend":"up","trendValue":"+8%","color":"default"}}}
 {"op":"add","path":"/elements/avg-kpi","value":{"type":"MetricCard","props":{"label":"客单价","value":"¥334","trend":"flat","color":"default"}}}
-{"op":"add","path":"/elements/refund-kpi","value":{"type":"MetricCard","props":{"label":"退款率","value":"2.1%","trend":"down","trendValue":"-0.3%","color":"red"}}}
+{"op":"add","path":"/elements/refund-kpi","value":{"type":"MetricCard","props":{"label":"退款率","value":"2.1%","trend":"down","trendValue":"-0.3%","color":"default"}}}
 {"op":"add","path":"/elements/chart-section","value":{"type":"Grid","props":{"columns":2,"gap":4},"children":["sales-chart","category-chart"]}}
 {"op":"add","path":"/elements/sales-chart","value":{"type":"LineChart","props":{"title":"销售额趋势","xAxis":["1月","2月","3月","4月","5月","6月"],"series":[{"name":"销售额","data":[42,38,55,47,62,58]},{"name":"退款额","data":[4,3,5,4,6,5]}],"height":"lg","smooth":true}}}
 {"op":"add","path":"/elements/category-chart","value":{"type":"BarChart","props":{"title":"品类销售排行","xAxis":["服饰","数码","食品","美妆","家居"],"series":[{"name":"销售额(万)","data":[35,28,22,18,15]}],"height":"lg"}}}

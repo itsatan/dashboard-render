@@ -12,10 +12,10 @@ interface MetricCardProps {
 
 const colorMap: Record<string, string> = {
     default: 'border-zinc-200',
-    blue: 'border-blue-200 bg-blue-50/30',
-    green: 'border-emerald-200 bg-emerald-50/30',
-    red: 'border-red-200 bg-red-50/30',
-    amber: 'border-amber-200 bg-amber-50/30',
+    blue: 'border-zinc-200',
+    green: 'border-zinc-200',
+    red: 'border-zinc-200',
+    amber: 'border-zinc-200',
 }
 
 const trendIcons: Record<string, string> = {
