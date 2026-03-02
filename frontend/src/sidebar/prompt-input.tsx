@@ -36,7 +36,7 @@ export function PromptInput({
                     onClick={handleGenerate}
                     disabled={isGenerating}
                 >
-                    <div className="relative z-10 flex items-center justify-center gap-2">
+                    <div className="relative z-10 flex items-center justify-center gap-2 cursor-pointer">
                         <SparkleIcon className="text-zinc-400 group-hover:text-white transition-colors" />
                         <span className="tracking-wide">Generate</span>
                         <ArrowRightIcon className="opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />

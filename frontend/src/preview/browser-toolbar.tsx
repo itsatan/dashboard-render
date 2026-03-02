@@ -46,7 +46,7 @@ function RefreshButton({
     onClick?: () => void
 }) {
     return (
-        <button className="text-zinc-400 hover:text-zinc-900 transition-colors" onClick={onClick}>
+        <button className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" onClick={onClick}>
             <RefreshIcon />
         </button>
     )
