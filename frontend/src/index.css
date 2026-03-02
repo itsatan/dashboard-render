@@ -70,3 +70,14 @@ body,
 @keyframes welcome-dash-travel {
     to { stroke-dashoffset: 0; }
 }
+
+/* Skeleton placeholder animations */
+@keyframes skeleton-fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes skeleton-status-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}

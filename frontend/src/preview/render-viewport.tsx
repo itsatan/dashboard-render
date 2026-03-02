@@ -3,20 +3,109 @@ import { Renderer, JSONUIProvider } from '@json-render/react'
 import { registry } from '@/renderer/registry'
 
 function SkeletonPlaceholder() {
+    const stagger = (i: number) => ({
+        opacity: 0,
+        animation: `skeleton-fade-up 0.5s ease-out ${i * 0.1}s forwards`,
+    })
+
     return (
-        <div className="p-6 min-h-full flex flex-col">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                {[12, 16, 10, 14].map((width, i) => (
-                    <div key={i} className="skeleton h-28 rounded-xl border border-zinc-100 bg-zinc-50/50 flex flex-col items-center justify-center gap-2">
-                        <div className={`h-2 bg-zinc-200/60 rounded-full w-${width}`} />
-                        <span className="text-[10px] text-zinc-300 font-mono tracking-tight italic">
-                            Metric Card Placeholder
-                        </span>
+        <div className="p-6 min-h-full flex flex-col gap-4">
+            {/* section title skeleton */}
+            <div className="flex flex-col gap-1.5 mb-1" style={stagger(0)}>
+                <div className="skeleton h-4 w-36 rounded bg-zinc-100" />
+                <div className="skeleton h-2.5 w-56 rounded bg-zinc-50" />
+            </div>
+
+            {/* 4-column metric cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3" style={stagger(1)}>
+                {[0, 1, 2, 3].map((i) => (
+                    <div
+                        key={i}
+                        className="skeleton rounded-xl border border-zinc-100 bg-zinc-50/40 p-4 flex flex-col gap-3"
+                        style={stagger(2 + i)}
+                    >
+                        <div className="h-2 w-14 rounded-full bg-zinc-200/50" />
+                        <div className="h-5 w-20 rounded bg-zinc-200/60" />
+                        <div className="flex items-center gap-2">
+                            <div className="h-1.5 w-8 rounded-full bg-indigo-200/30" />
+                            <div className="h-1.5 w-5 rounded-full bg-zinc-200/40" />
+                        </div>
                     </div>
                 ))}
             </div>
-            <div className="skeleton flex-1 w-full rounded-lg border border-zinc-100 bg-zinc-50/50 flex items-center justify-center">
-                <p className="text-sm text-zinc-300 italic">Waiting for JSON-Render output...</p>
+
+            {/* main chart + side panels */}
+            <div className="flex-1 grid grid-cols-3 gap-3 min-h-[180px]" style={stagger(6)}>
+                {/* chart area */}
+                <div className="col-span-2 skeleton rounded-xl border border-zinc-100 bg-zinc-50/40 p-5 flex flex-col" style={stagger(7)}>
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="h-3 w-24 rounded bg-zinc-200/50" />
+                        <div className="flex gap-2">
+                            <div className="h-2.5 w-10 rounded-full bg-zinc-100" />
+                            <div className="h-2.5 w-10 rounded-full bg-zinc-100" />
+                        </div>
+                    </div>
+                    {/* faux chart lines */}
+                    <div className="flex-1 flex flex-col justify-end gap-[6px] pb-2">
+                        {[65, 45, 80, 35, 55, 70, 40].map((w, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                                <div className="h-[1px] bg-zinc-100 flex-1" />
+                                <div
+                                    className="h-[3px] rounded-full bg-indigo-200/25"
+                                    style={{ width: `${w}%` }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    {/* axis ticks */}
+                    <div className="flex justify-between mt-2 px-1">
+                        {[0, 1, 2, 3, 4, 5].map((i) => (
+                            <div key={i} className="h-1.5 w-6 rounded-full bg-zinc-200/40" />
+                        ))}
+                    </div>
+                </div>
+
+                {/* side panels */}
+                <div className="flex flex-col gap-3" style={stagger(8)}>
+                    <div className="skeleton flex-1 rounded-xl border border-zinc-100 bg-zinc-50/40 p-4 flex flex-col gap-2.5">
+                        <div className="h-2.5 w-16 rounded bg-zinc-200/50" />
+                        <div className="h-2 w-full rounded bg-zinc-100/60" />
+                        <div className="h-2 w-3/4 rounded bg-zinc-100/60" />
+                        <div className="mt-auto flex gap-1.5">
+                            {[0, 1, 2].map((i) => (
+                                <div key={i} className="h-5 flex-1 rounded bg-zinc-100/50" />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="skeleton flex-1 rounded-xl border border-zinc-100 bg-zinc-50/40 p-4 flex flex-col gap-2.5">
+                        <div className="h-2.5 w-20 rounded bg-zinc-200/50" />
+                        <div className="flex-1 flex items-end gap-1.5 pt-2">
+                            {[40, 65, 30, 50, 75, 45].map((h, i) => (
+                                <div
+                                    key={i}
+                                    className="flex-1 rounded-sm bg-zinc-100/70"
+                                    style={{ height: `${h}%` }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* status indicator */}
+            <div
+                className="flex items-center justify-center gap-2 pt-1"
+                style={stagger(9)}
+            >
+                <svg width="12" height="12" viewBox="0 0 12 12" className="text-indigo-400/50" style={{ animation: 'skeleton-status-pulse 2s ease-in-out infinite' }}>
+                    <circle cx="6" cy="6" r="2" fill="currentColor" />
+                </svg>
+                <span
+                    className="text-[10px] font-mono text-zinc-300 tracking-wide"
+                    style={{ animation: 'skeleton-status-pulse 2s ease-in-out infinite' }}
+                >
+                    Generating layout...
+                </span>
             </div>
         </div>
     )
