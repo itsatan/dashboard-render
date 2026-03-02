@@ -8,6 +8,8 @@ import { ChartPlaceholder } from '@/renderer/components/chart-placeholder'
 import { LineChart } from '@/renderer/components/line-chart'
 import { BarChart } from '@/renderer/components/bar-chart'
 import { PieChart } from '@/renderer/components/pie-chart'
+import { RadarChart } from '@/renderer/components/radar-chart'
+import { GaugeChart } from '@/renderer/components/gauge-chart'
 import { SectionTitle } from '@/renderer/components/section-title'
 import { StatusDot } from '@/renderer/components/status-dot'
 
@@ -25,6 +27,8 @@ export const { registry } = defineRegistry(catalog, {
         LineChart,
         BarChart,
         PieChart,
+        RadarChart,
+        GaugeChart,
         SectionTitle,
         StatusDot,
     },

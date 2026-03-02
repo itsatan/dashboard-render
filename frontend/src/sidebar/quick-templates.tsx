@@ -4,60 +4,40 @@ interface QuickTemplatesProps {
 
 const TEMPLATES = [
     {
-        label: '四栏指标看板',
-        prompt: '生成一个标准四栏指标看板：顶部标题，4个指标卡片展示关键KPI数据，下方两个图表区域并排展示趋势',
-        icon: (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
-                <rect x="1" y="1" width="5" height="5" rx="1" />
-                <rect x="8" y="1" width="5" height="5" rx="1" />
-                <rect x="1" y="8" width="5" height="5" rx="1" />
-                <rect x="8" y="8" width="5" height="5" rx="1" />
-            </svg>
-        ),
+        label: '电商运营总览',
+        prompt: '创建一个电商运营数据仪表盘，包含销售额、订单量、客单价、退款率等核心KPI，销售趋势折线图，品类销售占比饼图，各渠道业绩对比柱状图',
     },
     {
-        label: '流量监控大屏',
-        prompt: '生成一个实时流量监控大屏：顶部3个核心流量指标卡，中间一个大的堆叠面积图展示实时流量趋势，底部两个小图表展示分类统计',
-        icon: (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="1,10 4,6 7,8 10,3 13,5" />
-                <polyline points="1,13 4,10 7,11 10,7 13,9" opacity="0.4" />
-            </svg>
-        ),
+        label: '服务器监控',
+        prompt: '创建一个服务器监控仪表盘，包含CPU、内存、磁盘、网络等核心指标卡片，CPU使用率仪表盘，资源使用趋势图，各服务健康状态点',
     },
     {
-        label: '左右分栏布局',
-        prompt: '生成一个左右分栏监控视图：左侧纵向排列4个指标卡展示关键数据，右侧纵向排列2个图表区域展示详细趋势',
-        icon: (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
-                <rect x="1" y="1" width="5" height="12" rx="1" />
-                <rect x="8" y="1" width="5" height="12" rx="1" />
-            </svg>
-        ),
+        label: '项目管理看板',
+        prompt: '创建一个项目管理仪表盘，包含项目进度完成率仪表盘、团队成员能力雷达图、任务完成趋势折线图、各阶段任务分布饼图和关键指标卡片',
     },
     {
-        label: '节点健康拓扑',
-        prompt: '生成一个节点健康度拓扑：顶部标题，6个状态指示点展示各节点状态（6列网格），下方一个拓扑图占位区域，底部两个柱状图展示统计',
-        icon: (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
-                <circle cx="7" cy="3" r="2" />
-                <circle cx="3" cy="11" r="2" />
-                <circle cx="11" cy="11" r="2" />
-                <line x1="5.5" y1="4.5" x2="4" y2="9.5" />
-                <line x1="8.5" y1="4.5" x2="10" y2="9.5" />
-            </svg>
-        ),
+        label: '竞争力分析',
+        prompt: '创建一个产品竞争力分析仪表盘，用雷达图对比3个产品在性能、价格、用户体验、市场份额、品牌认知等维度的表现，搭配市场占有率饼图和月度销量趋势折线图',
     },
     {
-        label: '三栏数据总览',
-        prompt: '生成一个三栏数据总览页面：顶部区域标题和描述，3列网格每列包含一个指标卡和一个图表，展示不同维度的数据',
-        icon: (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
-                <rect x="1" y="1" width="3" height="12" rx="0.5" />
-                <rect x="5.5" y="1" width="3" height="12" rx="0.5" />
-                <rect x="10" y="1" width="3" height="12" rx="0.5" />
-            </svg>
-        ),
+        label: '城市宜居指数',
+        prompt: '创建一个城市宜居指数分析仪表盘，包含多个城市的综合评分指标卡、各维度对比雷达图、环境空气质量指数仪表盘、近12个月空气质量趋势图',
+    },
+    {
+        label: '综合项目管理',
+        prompt: '创建一个项目管理仪表盘，包含项目进度、团队成员能力画像、任务完成趋势和预算使用情况',
+    },
+    {
+        label: '员工绩效评估',
+        prompt: '创建一个员工绩效评估仪表盘，用雷达图展示5个员工在沟通能力、技术能力、团队协作、创新能力、执行力等维度的表现，搭配绩效评分仪表盘和季度绩效趋势柱状图',
+    },
+    {
+        label: '财务报表概览',
+        prompt: '创建一个财务报表仪表盘，包含营收、利润、毛利率、负债率等核心财务指标卡片，收入支出趋势对比折线图，费用构成环形图，各部门预算执行率柱状图',
+    },
+    {
+        label: '健康监测面板',
+        prompt: '创建一个健康监测仪表盘，用仪表盘图展示心率、血压、血氧等实时指标，体重变化趋势折线图，运动类型分布饼图，身体各项指标雷达图综合评估',
     },
 ] as const
 
@@ -70,22 +50,15 @@ export function QuickTemplates({ onSelect }: QuickTemplatesProps) {
                 </svg>
                 快捷模板
             </h3>
-            <div className="space-y-1">
+            <div className="flex flex-wrap gap-1.5">
                 {TEMPLATES.map((tpl) => (
                     <button
                         key={tpl.label}
-                        className="group w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg border border-transparent hover:border-zinc-200 hover:bg-zinc-50/80 transition-all cursor-pointer"
+                        className="inline-flex items-center px-2.5 py-1.5 rounded-lg border border-zinc-100 bg-zinc-50/40 text-[11px] text-zinc-400 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-600 hover:shadow-[0_1px_4px_rgba(99,102,241,0.08)] transition-all duration-200 cursor-pointer"
                         onClick={() => onSelect(tpl.prompt)}
+                        title={tpl.prompt}
                     >
-                        <span className="flex-none flex items-center justify-center w-7 h-7 rounded-md bg-zinc-100/80 text-zinc-400 group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-colors">
-                            {tpl.icon}
-                        </span>
-                        <span className="text-[12px] text-zinc-600 group-hover:text-zinc-900 transition-colors text-left truncate">
-                            {tpl.label}
-                        </span>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="ml-auto flex-none text-zinc-200 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all">
-                            <path d="M3 1.5L7 5L3 8.5" />
-                        </svg>
+                        {tpl.label}
                     </button>
                 ))}
             </div>

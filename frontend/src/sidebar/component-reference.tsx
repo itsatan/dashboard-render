@@ -8,6 +8,8 @@ const COMPONENTS = [
     { name: 'LineChart', desc: 'ECharts 折线图' },
     { name: 'BarChart', desc: 'ECharts 柱状图' },
     { name: 'PieChart', desc: 'ECharts 饼图/环形图' },
+    { name: 'RadarChart', desc: 'ECharts 雷达图' },
+    { name: 'GaugeChart', desc: 'ECharts 仪表盘图' },
     { name: 'ChartPlaceholder', desc: '图表占位区域' },
     { name: 'SectionTitle', desc: '区域标题与描述' },
     { name: 'StatusDot', desc: '状态指示圆点' },

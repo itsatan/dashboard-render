@@ -107,6 +107,36 @@ export const catalog = defineCatalog(schema, {
             description: 'A section heading with optional description text.',
         },
 
+        RadarChart: {
+            props: z.object({
+                title: z.string(),
+                indicator: z.array(z.object({
+                    name: z.string(),
+                    max: z.number(),
+                })),
+                series: z.array(z.object({
+                    name: z.string(),
+                    data: z.array(z.number()),
+                })),
+                height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
+                shape: z.enum(['polygon', 'circle']).optional(),
+            }),
+            description: 'A real ECharts radar chart. Supports multiple series comparison on multiple dimensions.',
+        },
+
+        GaugeChart: {
+            props: z.object({
+                title: z.string(),
+                value: z.number(),
+                min: z.number().optional(),
+                max: z.number().optional(),
+                unit: z.string().optional(),
+                height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
+                color: z.enum(['blue', 'green', 'red', 'amber', 'auto']).optional(),
+            }),
+            description: 'A real ECharts gauge chart for displaying a single metric value with progress arc.',
+        },
+
         StatusDot: {
             props: z.object({
                 label: z.string(),
