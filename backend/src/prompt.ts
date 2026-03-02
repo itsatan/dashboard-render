@@ -72,13 +72,33 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
         showLabel?: boolean (是否显示百分比标签)
     }
 
-9. SectionTitle - 区域标题
+9. RadarChart - 真实雷达图（适合多维度对比分析，需提供具体数据）
+    Props: {
+        title: string (图表标题),
+        indicator: Array<{ name: string, max: number }> (雷达指标轴，每个轴有名称和最大值),
+        series: Array<{ name: string, data: number[] }> (数据系列，data长度必须与indicator长度一致),
+        height: "sm" | "md" | "lg" | "xl" (默认"md"),
+        shape?: "polygon" | "circle" (雷达形状，默认polygon)
+    }
+
+10. GaugeChart - 真实仪表盘图（适合展示单一指标的完成度/进度/健康度）
+    Props: {
+        title: string (图表标题),
+        value: number (当前值),
+        min?: number (最小值，默认0),
+        max?: number (最大值，默认100),
+        unit?: string (单位，如"%"、"℃"、"分"),
+        height: "sm" | "md" | "lg" | "xl" (默认"md"),
+        color?: "blue" | "green" | "red" | "amber" | "auto" (颜色模式，auto会根据值自动变色：低绿中黄高红)
+    }
+
+11. SectionTitle - 区域标题
     Props: {
         title: string,
         description?: string
     }
 
-10. StatusDot - 状态指示点
+12. StatusDot - 状态指示点
     Props: {
         label: string,
         status: "healthy" | "warning" | "critical" | "unknown" (默认"healthy")
@@ -92,22 +112,30 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 
 布局结构：
 - Grid/Flex/Card 是容器组件，通过 children 数组包含子元素
-- MetricCard/LineChart/BarChart/PieChart/ChartPlaceholder/SectionTitle/StatusDot 是叶子组件，没有 children
+- MetricCard/LineChart/BarChart/PieChart/RadarChart/GaugeChart/ChartPlaceholder/SectionTitle/StatusDot 是叶子组件，没有 children
 - 每个元素必须有 type 和 props，容器组件还需要 children
 
 图表使用规则：
-- 优先使用 LineChart、BarChart 和 PieChart 真实图表组件，为其生成合理的模拟数据
+- 优先使用真实图表组件（LineChart、BarChart、PieChart、RadarChart、GaugeChart），为其生成合理的模拟数据
+- 你需要根据数据特征自主选择最合适的图表类型，不要只用折线图和柱状图：
+  · 时间趋势数据 → LineChart（如月度销售额、每日访问量）
+  · 分类对比数据 → BarChart（如各部门业绩、各产品销量）
+  · 占比/构成数据 → PieChart（如市场份额、费用构成）
+  · 多维度综合评估 → RadarChart（如员工能力评估、产品竞争力分析、城市宜居指数）
+  · 单一指标进度/健康度 → GaugeChart（如CPU使用率、完成进度、满意度评分）
 - xAxis 通常为时间维度（如月份、日期、小时）或分类维度（如产品名、地区名）
-- series 中的 data 数组长度必须与 xAxis 长度一致
+- series 中的 data 数组长度必须与 xAxis 长度一致（LineChart/BarChart）
+- RadarChart 的 series.data 长度必须与 indicator 长度一致
 - 饼图和环形图必须使用 PieChart 组件（通过 donut 属性控制是否为环形图）
-- 只有在图表类型不适合用 LineChart/BarChart/PieChart 表示时（如 scatter、topology），才使用 ChartPlaceholder
+- GaugeChart 适合在 Grid 中与其他 GaugeChart 并排展示多个独立指标
+- 只有在图表类型不适合用以上真实图表表示时（如 scatter、topology），才使用 ChartPlaceholder
 
 规则：
 1. 只输出 JSONL 行，不要输出任何其他文字、解释或 markdown
 2. 始终使用中文标签和描述
 3. 布局优先使用 Grid 和 Flex 组件
 4. 每个仪表盘包含一个 SectionTitle 作为标题
-5. 指标数据使用 MetricCard，图表区域优先使用 LineChart/BarChart/PieChart
+5. 指标数据使用 MetricCard，图表区域优先使用 LineChart/BarChart/PieChart/RadarChart/GaugeChart，根据数据特征自主选择最合适的图表类型
 6. 元素 key 使用英文短横线命名（如 "main-grid", "cpu-metric"）
 7. 不要输出 \`\`\`json 代码块标记，直接输出 JSONL 行
 
