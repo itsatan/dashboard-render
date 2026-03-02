@@ -115,9 +115,11 @@ function ChartIllustration({ type }: { type: string }) {
 export function ChartPlaceholder({ props }: BaseComponentProps<ChartPlaceholderProps>) {
     return (
         <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
-            <div className="border-b border-zinc-100 px-4 py-3">
-                <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
-            </div>
+            {props.title && (
+                <div className="border-b border-zinc-100 px-4 py-3">
+                    <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
+                </div>
+            )}
             <div className={clsx(
                 'flex flex-col items-center justify-center gap-3',
                 heightMap[props.height],

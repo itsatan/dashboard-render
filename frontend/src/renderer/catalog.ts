@@ -28,7 +28,7 @@ export const catalog = defineCatalog(schema, {
             props: z.object({
                 title: z.string().optional(),
                 subtitle: z.string().optional(),
-                padding: z.enum(['none', 'sm', 'md', 'lg']).default('md'),
+                padding: z.enum(['sm', 'md', 'lg']).default('md'),
             }),
             slots: ['default'],
             description: 'A card container with optional title and border/shadow.',
@@ -48,7 +48,7 @@ export const catalog = defineCatalog(schema, {
 
         ChartPlaceholder: {
             props: z.object({
-                title: z.string(),
+                title: z.string().optional(),
                 chartType: z.enum(['line', 'bar', 'area', 'pie', 'donut', 'scatter', 'stacked-area', 'topology']).default('line'),
                 height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
             }),
@@ -57,7 +57,7 @@ export const catalog = defineCatalog(schema, {
 
         LineChart: {
             props: z.object({
-                title: z.string(),
+                title: z.string().optional(),
                 xAxis: z.array(z.string()),
                 series: z.array(z.object({
                     name: z.string(),
@@ -72,7 +72,7 @@ export const catalog = defineCatalog(schema, {
 
         BarChart: {
             props: z.object({
-                title: z.string(),
+                title: z.string().optional(),
                 xAxis: z.array(z.string()),
                 series: z.array(z.object({
                     name: z.string(),
@@ -87,7 +87,7 @@ export const catalog = defineCatalog(schema, {
 
         PieChart: {
             props: z.object({
-                title: z.string(),
+                title: z.string().optional(),
                 data: z.array(z.object({
                     name: z.string(),
                     value: z.number(),
@@ -109,7 +109,7 @@ export const catalog = defineCatalog(schema, {
 
         RadarChart: {
             props: z.object({
-                title: z.string(),
+                title: z.string().optional(),
                 indicator: z.array(z.object({
                     name: z.string(),
                     max: z.number(),
@@ -126,7 +126,7 @@ export const catalog = defineCatalog(schema, {
 
         GaugeChart: {
             props: z.object({
-                title: z.string(),
+                title: z.string().optional(),
                 value: z.number(),
                 min: z.number().optional(),
                 max: z.number().optional(),

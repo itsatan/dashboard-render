@@ -153,9 +153,11 @@ export function GaugeChart({ props }: BaseComponentProps<GaugeChartProps>) {
 
     return (
         <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
-            <div className="border-b border-zinc-100 px-4 py-3">
-                <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
-            </div>
+            {props.title && (
+                <div className="border-b border-zinc-100 px-4 py-3">
+                    <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
+                </div>
+            )}
             <div className={clsx('w-full p-4', heightMap[props.height])}>
                 <div ref={chartRef} className="w-full h-full" />
             </div>
