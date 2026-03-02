@@ -16,7 +16,7 @@ const paddingMap: Record<string, string> = {
 
 export function Card({ props, children }: BaseComponentProps<CardProps>) {
     return (
-        <div className={clsx('rounded-xl border border-zinc-200 bg-white shadow-sm', paddingMap[props.padding])}>
+        <div className={clsx('rounded-lg border border-zinc-200 bg-white shadow-sm', paddingMap[props.padding])}>
             {props.title && (
                 <div className="mb-3">
                     <h3 className="text-sm font-semibold text-zinc-900">{props.title}</h3>

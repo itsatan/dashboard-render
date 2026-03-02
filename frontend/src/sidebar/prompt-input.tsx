@@ -51,11 +51,11 @@ export function PromptInput({
                     />
                 </div>
                 <button
-                    className="group relative w-full overflow-hidden rounded-lg bg-zinc-950 py-2.5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(0,0,0,0.1),0_8px_16px_-4px_rgba(0,0,0,0.1)] transition-all hover:bg-zinc-900 active:scale-[0.98] disabled:opacity-50"
+                    className="group relative w-full overflow-hidden rounded-lg bg-zinc-950 py-2.5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(0,0,0,0.1),0_8px_16px_-4px_rgba(0,0,0,0.1)] transition-all hover:bg-zinc-900 active:scale-[0.98] disabled:opacity-50  cursor-pointer"
                     onClick={handleGenerate}
                     disabled={isGenerating || !value.trim()}
                 >
-                    <div className="relative z-10 flex items-center justify-center gap-2 cursor-pointer">
+                    <div className="relative z-10 flex items-center justify-center gap-2">
                         {isGenerating ? (
                             <>
                                 <svg width="14" height="14" viewBox="0 0 14 14" className="animate-spin text-zinc-400">

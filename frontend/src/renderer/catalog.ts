@@ -55,6 +55,36 @@ export const catalog = defineCatalog(schema, {
             description: 'A visual placeholder representing a chart area.',
         },
 
+        LineChart: {
+            props: z.object({
+                title: z.string(),
+                xAxis: z.array(z.string()),
+                series: z.array(z.object({
+                    name: z.string(),
+                    data: z.array(z.number()),
+                })),
+                height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
+                smooth: z.boolean().optional(),
+                showArea: z.boolean().optional(),
+            }),
+            description: 'A real ECharts line chart with data. Supports multiple series, smooth curves, and area fill.',
+        },
+
+        BarChart: {
+            props: z.object({
+                title: z.string(),
+                xAxis: z.array(z.string()),
+                series: z.array(z.object({
+                    name: z.string(),
+                    data: z.array(z.number()),
+                })),
+                height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
+                stack: z.boolean().optional(),
+                horizontal: z.boolean().optional(),
+            }),
+            description: 'A real ECharts bar chart with data. Supports multiple series, stacking, and horizontal mode.',
+        },
+
         SectionTitle: {
             props: z.object({
                 title: z.string(),

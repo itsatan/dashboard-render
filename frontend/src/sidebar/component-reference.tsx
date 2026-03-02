@@ -5,6 +5,8 @@ const COMPONENTS = [
     { name: 'Flex', desc: 'Flexbox 弹性布局' },
     { name: 'Card', desc: '内容卡片容器' },
     { name: 'MetricCard', desc: 'KPI 指标数据卡' },
+    { name: 'LineChart', desc: 'ECharts 折线图' },
+    { name: 'BarChart', desc: 'ECharts 柱状图' },
     { name: 'ChartPlaceholder', desc: '图表占位区域' },
     { name: 'SectionTitle', desc: '区域标题与描述' },
     { name: 'StatusDot', desc: '状态指示圆点' },

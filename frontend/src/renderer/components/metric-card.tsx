@@ -32,7 +32,7 @@ const trendColors: Record<string, string> = {
 
 export function MetricCard({ props }: BaseComponentProps<MetricCardProps>) {
     return (
-        <div className={clsx('rounded-xl border bg-white p-4 shadow-sm', colorMap[props.color])}>
+        <div className={clsx('rounded-lg border bg-white p-4 shadow-sm', colorMap[props.color])}>
             <p className="mb-1 text-xs font-medium text-zinc-500">{props.label}</p>
             <div className="flex items-baseline gap-1.5">
                 <span className="text-2xl font-bold tracking-tight text-zinc-900">{props.value}</span>

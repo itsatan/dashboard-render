@@ -27,7 +27,7 @@ const chartTypeLabels: Record<string, string> = {
 
 export function ChartPlaceholder({ props }: BaseComponentProps<ChartPlaceholderProps>) {
     return (
-        <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
             <div className="border-b border-zinc-100 px-4 py-3">
                 <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
             </div>
