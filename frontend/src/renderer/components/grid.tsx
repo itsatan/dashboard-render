@@ -10,7 +10,7 @@ export function Grid({ props, children }: BaseComponentProps<GridProps>) {
         <div
             className="grid w-full"
             style={{
-                gridTemplateColumns: `repeat(${props.columns}, minmax(0, 1fr))`,
+                gridTemplateColumns: `repeat(${props.columns}, minmax(140px, 1fr))`,
                 gap: `${props.gap * 4}px`,
             }}
         >

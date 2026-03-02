@@ -85,6 +85,20 @@ export const catalog = defineCatalog(schema, {
             description: 'A real ECharts bar chart with data. Supports multiple series, stacking, and horizontal mode.',
         },
 
+        PieChart: {
+            props: z.object({
+                title: z.string(),
+                data: z.array(z.object({
+                    name: z.string(),
+                    value: z.number(),
+                })),
+                height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
+                donut: z.boolean().optional(),
+                showLabel: z.boolean().optional(),
+            }),
+            description: 'A real ECharts pie/donut chart. Supports donut mode and percentage labels.',
+        },
+
         SectionTitle: {
             props: z.object({
                 title: z.string(),

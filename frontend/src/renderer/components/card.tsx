@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { BaseComponentProps } from '@json-render/react'
 
 interface CardProps {
@@ -10,20 +9,25 @@ interface CardProps {
 const paddingMap: Record<string, string> = {
     none: '',
     sm: 'p-3',
-    md: 'p-5',
-    lg: 'p-6',
+    md: 'p-4',
+    lg: 'p-5',
 }
 
 export function Card({ props, children }: BaseComponentProps<CardProps>) {
+    const hasHeader = !!props.title
     return (
-        <div className={clsx('rounded-lg border border-zinc-200 bg-white shadow-sm', paddingMap[props.padding])}>
-            {props.title && (
-                <div className="mb-3">
-                    <h3 className="text-sm font-semibold text-zinc-900">{props.title}</h3>
-                    {props.subtitle && <p className="mt-0.5 text-xs text-zinc-500">{props.subtitle}</p>}
+        <div className="rounded-lg border border-zinc-200 bg-white">
+            {hasHeader && (
+                <div className="border-b border-zinc-100 px-4 py-3">
+                    <h3 className="text-xs font-semibold text-zinc-800">{props.title}</h3>
+                    {props.subtitle && (
+                        <p className="mt-0.5 text-[11px] text-zinc-400">{props.subtitle}</p>
+                    )}
                 </div>
             )}
-            {children}
+            <div className={paddingMap[props.padding]}>
+                {children}
+            </div>
         </div>
     )
 }

@@ -112,7 +112,7 @@ export function LineChart({ props }: BaseComponentProps<LineChartProps>) {
     }, [props])
 
     return (
-        <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
             <div className="border-b border-zinc-100 px-4 py-3">
                 <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
             </div>

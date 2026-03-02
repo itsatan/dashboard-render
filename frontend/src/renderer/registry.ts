@@ -7,6 +7,7 @@ import { MetricCard } from '@/renderer/components/metric-card'
 import { ChartPlaceholder } from '@/renderer/components/chart-placeholder'
 import { LineChart } from '@/renderer/components/line-chart'
 import { BarChart } from '@/renderer/components/bar-chart'
+import { PieChart } from '@/renderer/components/pie-chart'
 import { SectionTitle } from '@/renderer/components/section-title'
 import { StatusDot } from '@/renderer/components/status-dot'
 
@@ -23,6 +24,7 @@ export const { registry } = defineRegistry(catalog, {
         ChartPlaceholder,
         LineChart,
         BarChart,
+        PieChart,
         SectionTitle,
         StatusDot,
     },

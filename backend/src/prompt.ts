@@ -18,7 +18,7 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
     }
     Slots: ["default"]
 
-3. Card - 卡片容器，带边框和阴影
+3. Card - 卡片容器，带边框
     Props: {
         title?: string,
         subtitle?: string,
@@ -63,13 +63,22 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
         horizontal?: boolean (是否水平方向)
     }
 
-8. SectionTitle - 区域标题
+8. PieChart - 真实饼图/环形图（优先使用，需提供具体数据）
+    Props: {
+        title: string (图表标题),
+        data: Array<{ name: string, value: number }> (数据项，每项包含名称和数值),
+        height: "sm" | "md" | "lg" | "xl" (默认"md"),
+        donut?: boolean (是否环形图，默认false),
+        showLabel?: boolean (是否显示百分比标签)
+    }
+
+9. SectionTitle - 区域标题
     Props: {
         title: string,
         description?: string
     }
 
-9. StatusDot - 状态指示点
+10. StatusDot - 状态指示点
     Props: {
         label: string,
         status: "healthy" | "warning" | "critical" | "unknown" (默认"healthy")
@@ -83,21 +92,22 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 
 布局结构：
 - Grid/Flex/Card 是容器组件，通过 children 数组包含子元素
-- MetricCard/LineChart/BarChart/ChartPlaceholder/SectionTitle/StatusDot 是叶子组件，没有 children
+- MetricCard/LineChart/BarChart/PieChart/ChartPlaceholder/SectionTitle/StatusDot 是叶子组件，没有 children
 - 每个元素必须有 type 和 props，容器组件还需要 children
 
 图表使用规则：
-- 优先使用 LineChart 和 BarChart 真实图表组件，为其生成合理的模拟数据
+- 优先使用 LineChart、BarChart 和 PieChart 真实图表组件，为其生成合理的模拟数据
 - xAxis 通常为时间维度（如月份、日期、小时）或分类维度（如产品名、地区名）
 - series 中的 data 数组长度必须与 xAxis 长度一致
-- 只有在图表类型不适合用 LineChart/BarChart 表示时（如 pie、donut、scatter、topology），才使用 ChartPlaceholder
+- 饼图和环形图必须使用 PieChart 组件（通过 donut 属性控制是否为环形图）
+- 只有在图表类型不适合用 LineChart/BarChart/PieChart 表示时（如 scatter、topology），才使用 ChartPlaceholder
 
 规则：
 1. 只输出 JSONL 行，不要输出任何其他文字、解释或 markdown
 2. 始终使用中文标签和描述
 3. 布局优先使用 Grid 和 Flex 组件
 4. 每个仪表盘包含一个 SectionTitle 作为标题
-5. 指标数据使用 MetricCard，图表区域优先使用 LineChart/BarChart
+5. 指标数据使用 MetricCard，图表区域优先使用 LineChart/BarChart/PieChart
 6. 元素 key 使用英文短横线命名（如 "main-grid", "cpu-metric"）
 7. 不要输出 \`\`\`json 代码块标记，直接输出 JSONL 行
 
@@ -129,6 +139,6 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 {"op":"add","path":"/elements/refund-kpi","value":{"type":"MetricCard","props":{"label":"退款率","value":"2.1%","trend":"down","trendValue":"-0.3%","color":"default"}}}
 {"op":"add","path":"/elements/chart-section","value":{"type":"Grid","props":{"columns":2,"gap":4},"children":["sales-chart","category-chart"]}}
 {"op":"add","path":"/elements/sales-chart","value":{"type":"LineChart","props":{"title":"销售额趋势","xAxis":["1月","2月","3月","4月","5月","6月"],"series":[{"name":"销售额","data":[42,38,55,47,62,58]},{"name":"退款额","data":[4,3,5,4,6,5]}],"height":"lg","smooth":true}}}
-{"op":"add","path":"/elements/category-chart","value":{"type":"BarChart","props":{"title":"品类销售排行","xAxis":["服饰","数码","食品","美妆","家居"],"series":[{"name":"销售额(万)","data":[35,28,22,18,15]}],"height":"lg"}}}
+{"op":"add","path":"/elements/category-chart","value":{"type":"PieChart","props":{"title":"品类销售分布","data":[{"name":"服饰","value":35},{"name":"数码","value":28},{"name":"食品","value":22},{"name":"美妆","value":18},{"name":"家居","value":15}],"height":"lg","donut":true,"showLabel":true}}}
 
 现在根据用户的需求生成 JSONL:`
