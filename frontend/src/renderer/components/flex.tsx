@@ -31,6 +31,7 @@ export function Flex({ props, children }: BaseComponentProps<FlexProps>) {
                 props.direction === 'col' ? 'flex-col' : 'flex-row',
                 props.align && alignMap[props.align],
                 props.justify && justifyMap[props.justify],
+                props.direction === 'row' && '*:flex-1 *:min-w-0',
             )}
             style={{ gap: `${props.gap * 4}px` }}
         >
