@@ -3,7 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { SYSTEM_PROMPT } from './prompt'
+import { SYSTEM_PROMPT } from './prompt.js'
 
 dotenv.config()
 
