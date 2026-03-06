@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import * as echarts from 'echarts/core'
 import { PieChart as EPieChart } from 'echarts/charts'
 import {
@@ -8,15 +8,18 @@ import {
 import { SVGRenderer } from 'echarts/renderers'
 import clsx from 'clsx'
 import type { BaseComponentProps } from '@json-render/react'
+import { ChartSkeleton } from './chart-skeleton'
+import type { DataSourceConfig, PieChartData } from '@/context/data-context'
 
 echarts.use([EPieChart, TooltipComponent, LegendComponent, SVGRenderer])
 
 interface PieChartProps {
-    title: string
-    data: Array<{ name: string; value: number }>
-    height: 'sm' | 'md' | 'lg' | 'xl'
+    title?: string
+    data?: Array<{ name: string; value: number }>
+    height?: 'sm' | 'md' | 'lg' | 'xl'
     donut?: boolean
     showLabel?: boolean
+    dataSource?: DataSourceConfig
 }
 
 const heightMap: Record<string, string> = {
@@ -32,13 +35,68 @@ export function PieChart({ props }: BaseComponentProps<PieChartProps>) {
     const chartRef = useRef<HTMLDivElement>(null)
     const instanceRef = useRef<echarts.ECharts | null>(null)
 
+    // 动态数据状态
+    const [dynamicData, setDynamicData] = useState<PieChartData | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    // 确定使用的数据源
+    const data = props.data || dynamicData?.data
+
+    // 是否需要加载动态数据
+    const needsDynamicData = props.dataSource && !props.data
+    const hasData = data && data.length > 0
+
+    // 获取动态数据
+    const fetchDynamicData = useCallback(async () => {
+        if (!props.dataSource) return
+
+        setIsLoading(true)
+        setError(null)
+
+        try {
+            const response = await fetch('/api/data/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(props.dataSource.params || {})
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            const result: PieChartData = await response.json()
+            setDynamicData(result)
+        } catch (err) {
+            setError(err instanceof Error ? err.message : '数据加载失败')
+        } finally {
+            setIsLoading(false)
+        }
+    }, [props.dataSource])
+
+    // 首次加载动态数据
     useEffect(() => {
-        if (!chartRef.current) return
+        if (needsDynamicData) {
+            fetchDynamicData()
+        }
+    }, [needsDynamicData, fetchDynamicData])
+
+    // 自动刷新
+    useEffect(() => {
+        if (props.dataSource?.refreshInterval) {
+            const timer = setInterval(fetchDynamicData, props.dataSource.refreshInterval * 1000)
+            return () => clearInterval(timer)
+        }
+    }, [props.dataSource?.refreshInterval, fetchDynamicData])
+
+    // 渲染图表 - 必须在所有条件返回之前
+    useEffect(() => {
+        if (!chartRef.current || !hasData || !data) return
 
         const chart = echarts.init(chartRef.current, undefined, { renderer: 'svg' })
         instanceRef.current = chart
 
-        const total = props.data.reduce((sum, d) => sum + d.value, 0)
+        const total = data.reduce((sum, d) => sum + d.value, 0)
 
         const option: echarts.EChartsCoreOption = {
             color: COLORS,
@@ -66,7 +124,7 @@ export function PieChart({ props }: BaseComponentProps<PieChartProps>) {
                     type: 'pie',
                     radius: props.donut ? ['40%', '70%'] : ['0%', '70%'],
                     center: ['50%', '45%'],
-                    data: props.data,
+                    data: data,
                     label: {
                         show: props.showLabel ?? false,
                         formatter: (params: any) => {
@@ -109,18 +167,91 @@ export function PieChart({ props }: BaseComponentProps<PieChartProps>) {
             chart.dispose()
             instanceRef.current = null
         }
-    }, [props])
+    }, [hasData, data, props.donut, props.showLabel])
 
-    return (
-        <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
-            {props.title && (
-                <div className="border-b border-zinc-100 px-4 py-3">
-                    <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
+    // 决定渲染内容
+    const renderContent = useMemo(() => {
+        if (isLoading) {
+            return (
+                <ChartSkeleton
+                    title={props.title}
+                    height={props.height || 'md'}
+                    chartType="pie"
+                    onRefresh={fetchDynamicData}
+                />
+            )
+        }
+
+        if (error) {
+            return (
+                <ChartSkeleton
+                    title={props.title}
+                    height={props.height || 'md'}
+                    chartType="pie"
+                    error={error}
+                    onRefresh={fetchDynamicData}
+                />
+            )
+        }
+
+        if (!hasData) {
+            return (
+                <ChartSkeleton
+                    title={props.title}
+                    height={props.height || 'md'}
+                    chartType="pie"
+                    onRefresh={fetchDynamicData}
+                />
+            )
+        }
+
+        return (
+            <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
+                {props.title && (
+                    <div className="border-b border-zinc-100 px-4 py-3 flex items-center justify-between">
+                        <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
+                        {props.dataSource && (
+                            <button
+                                onClick={fetchDynamicData}
+                                className="p-1 rounded hover:bg-zinc-100 transition-colors group"
+                                title="刷新数据"
+                            >
+                                <svg
+                                    className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-600 transition-colors"
+                                    viewBox="0 0 14 14"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M2 7a5 5 0 0 1 8.5-3.5M12 7a5 5 0 0 1-8.5 3.5"
+                                        stroke="currentColor"
+                                        strokeWidth="1.2"
+                                        strokeLinecap="round"
+                                    />
+                                    <path
+                                        d="M10 2h2.5M10 2v2.5"
+                                        stroke="currentColor"
+                                        strokeWidth="1.2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M4 12H1.5M4 12v-2.5"
+                                        stroke="currentColor"
+                                        strokeWidth="1.2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+                )}
+                <div className={clsx('w-full p-4', heightMap[props.height || 'md'])}>
+                    <div ref={chartRef} className="w-full h-full" />
                 </div>
-            )}
-            <div className={clsx('w-full p-4', heightMap[props.height])}>
-                <div ref={chartRef} className="w-full h-full" />
             </div>
-        </div>
-    )
+        )
+    }, [isLoading, error, hasData, props.title, props.height, props.dataSource, fetchDynamicData])
+
+    return renderContent
 }

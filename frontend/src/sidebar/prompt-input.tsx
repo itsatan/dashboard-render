@@ -38,7 +38,7 @@ export function PromptInput({
     }, [handleGenerate])
 
     return (
-        <div className="p-4 bg-zinc-50/50 border-t border-zinc-100">
+        <div className="shrink-0 p-4 bg-zinc-50/50 border-t border-zinc-100">
             <div className="flex flex-col gap-3">
                 <div className="bg-white border border-zinc-200 rounded-lg shadow-sm focus-within:border-zinc-400 focus-within:ring-4 focus-within:ring-zinc-100 transition-all">
                     <textarea

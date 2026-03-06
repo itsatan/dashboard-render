@@ -1,18 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useUIStream } from '@json-render/react'
 import { nanoid } from 'nanoid'
 import { Header } from '@/header/header'
 import { Sidebar } from '@/sidebar/sidebar'
 import { PreviewPanel } from '@/preview/preview-panel'
+import { useAgentStream } from '@/hooks/use-agent-stream'
 
 export function App() {
 
     const [shareId, setShareId] = useState(() => nanoid(8))
 
-    const { spec: streamSpec, isStreaming, error, send } = useUIStream({
-        api: '/api/generate',
-        onError: (err) => console.error('Generate error:', err),
-    })
+    const { spec: streamSpec, isStreaming, error, thinkingSteps, send } = useAgentStream()
 
     const onGenerate = useCallback(async (prompt: string) => {
         setShareId(nanoid(8))
@@ -39,6 +36,8 @@ export function App() {
                 <Sidebar
                     onGenerate={onGenerate}
                     isGenerating={isStreaming}
+                    thinkingSteps={thinkingSteps}
+                    thinkingError={error?.message}
                 />
                 <PreviewPanel spec={streamSpec} loading={isStreaming} shareUrl={shareUrl} />
             </main>

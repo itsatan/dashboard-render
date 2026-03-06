@@ -173,7 +173,44 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 | 进度、完成率 | GaugeChart |
 
 ================================================================================
-七、输出协议（必须严格遵守）
+七、数据源配置协议
+================================================================================
+
+当用户请求涉及真实数据查询时（如集群数据、VIP/VS 数据等），使用 dataSource 配置替代静态数据：
+
+【dataSource 结构】
+{
+    "type": "mock",           // 数据源类型: mock | api | mcp
+    "params": {               // 查询参数
+        "cluster": "集群名",   // 从用户 prompt 提取
+        "resourceType": "VIP" // 资源类型: VIP | VS | Server | Connection
+    }
+}
+
+【使用规则】
+1. 当用户提到"查一下"、"获取"、"展示...数据"等数据查询需求时，使用 dataSource
+2. 从 prompt 中提取关键信息（集群名、资源类型等）填入 params
+3. 图表组件不提供 xAxis/series/data 等静态数据，改为提供 dataSource
+4. 如果用户需求不涉及数据查询，继续使用静态数据
+
+【支持 dataSource 的组件】
+- LineChart: 提供 dataSource，无需 xAxis 和 series
+- BarChart: 提供 dataSource，无需 xAxis 和 series
+- PieChart: 提供 dataSource，无需 data
+- RadarChart: 提供 dataSource，无需 indicator 和 series
+- GaugeChart: 提供 dataSource，无需 value
+
+【示例】
+用户: "帮我查一下BGW集群bdbl-sys-bgwcluster下的VIP和VS数据"
+响应:
+    {"op":"add","path":"/root","value":"dashboard"}
+    {"op":"add","path":"/elements/dashboard","value":{"type":"Flex","props":{"direction":"col","gap":6},"children":["title","vip-chart","vs-chart"]}}
+    {"op":"add","path":"/elements/title","value":{"type":"SectionTitle","props":{"title":"BGW集群数据查询","description":"集群: bdbl-sys-bgwcluster"}}}
+    {"op":"add","path":"/elements/vip-chart","value":{"type":"LineChart","props":{"title":"VIP连接数趋势","dataSource":{"type":"mock","params":{"cluster":"bdbl-sys-bgwcluster","resourceType":"VIP"}},"height":"lg"}}}
+    {"op":"add","path":"/elements/vs-chart","value":{"type":"BarChart","props":{"title":"VS数量统计","dataSource":{"type":"mock","params":{"cluster":"bdbl-sys-bgwcluster","resourceType":"VS"}},"height":"lg"}}}
+
+================================================================================
+八、输出协议（必须严格遵守）
 ================================================================================
 
 1. 仅输出 JSONL 行，每行一个 JSON 对象, 使用 RFC 6902 JSON Patch 操作, 不要输出 \`\`\`json 代码块标记
@@ -193,9 +230,9 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
 ❌ 禁止容器 children 为空
 ❌ 禁止嵌套超过 3 层
 
-============================================================================
-八、示例
-============================================================================
+================================================================================
+九、示例
+================================================================================
 1. 用户: "创建一个服务器监控仪表盘"
     {"op":"add","path":"/root","value":"dashboard"}
     {"op":"add","path":"/elements/dashboard","value":{"type":"Flex","props":{"direction":"col","gap":6},"children":["title","metrics-grid","charts-grid"]}}
