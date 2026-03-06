@@ -22,7 +22,7 @@ export function Card({ props, children }: BaseComponentProps<CardProps>) {
                     <div className="absolute bottom-0 left-4 right-4 h-px bg-linear-to-r from-zinc-200/80 via-zinc-200/40 to-transparent" />
                 </div>
             )}
-            <div className="px-4 py-3.5">
+            <div className="flex flex-col gap-4 px-4 py-3.5">
                 {children}
             </div>
         </div>

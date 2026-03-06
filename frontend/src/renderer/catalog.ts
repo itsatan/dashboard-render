@@ -2,6 +2,14 @@ import { defineCatalog } from '@json-render/core'
 import { schema } from '@json-render/react/schema'
 import { z } from 'zod'
 
+// 数据源配置 Schema
+const DataSourceSchema = z.object({
+    type: z.enum(['mock', 'api', 'mcp']).default('mock'),
+    endpoint: z.string().optional(),
+    params: z.record(z.string(), z.unknown()).optional(),
+    refreshInterval: z.number().optional(), // 秒
+})
+
 export const catalog = defineCatalog(schema, {
     components: {
         Grid: {
@@ -58,31 +66,33 @@ export const catalog = defineCatalog(schema, {
         LineChart: {
             props: z.object({
                 title: z.string().optional(),
-                xAxis: z.array(z.string()),
+                xAxis: z.array(z.string()).optional(),
                 series: z.array(z.object({
                     name: z.string(),
                     data: z.array(z.number()),
-                })),
+                })).optional(),
                 height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
                 smooth: z.boolean().optional(),
                 showArea: z.boolean().optional(),
+                dataSource: DataSourceSchema.optional(),
             }),
-            description: 'A real ECharts line chart with data. Supports multiple series, smooth curves, and area fill.',
+            description: 'A real ECharts line chart with data. Supports multiple series, smooth curves, and area fill. Use dataSource for dynamic data fetching.',
         },
 
         BarChart: {
             props: z.object({
                 title: z.string().optional(),
-                xAxis: z.array(z.string()),
+                xAxis: z.array(z.string()).optional(),
                 series: z.array(z.object({
                     name: z.string(),
                     data: z.array(z.number()),
-                })),
+                })).optional(),
                 height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
                 stack: z.boolean().optional(),
                 horizontal: z.boolean().optional(),
+                dataSource: DataSourceSchema.optional(),
             }),
-            description: 'A real ECharts bar chart with data. Supports multiple series, stacking, and horizontal mode.',
+            description: 'A real ECharts bar chart with data. Supports multiple series, stacking, and horizontal mode. Use dataSource for dynamic data fetching.',
         },
 
         PieChart: {
@@ -91,12 +101,13 @@ export const catalog = defineCatalog(schema, {
                 data: z.array(z.object({
                     name: z.string(),
                     value: z.number(),
-                })),
+                })).optional(),
                 height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
                 donut: z.boolean().optional(),
                 showLabel: z.boolean().optional(),
+                dataSource: DataSourceSchema.optional(),
             }),
-            description: 'A real ECharts pie/donut chart. Supports donut mode and percentage labels.',
+            description: 'A real ECharts pie/donut chart. Supports donut mode and percentage labels. Use dataSource for dynamic data fetching.',
         },
 
         SectionTitle: {
@@ -113,28 +124,30 @@ export const catalog = defineCatalog(schema, {
                 indicator: z.array(z.object({
                     name: z.string(),
                     max: z.number(),
-                })),
+                })).optional(),
                 series: z.array(z.object({
                     name: z.string(),
                     data: z.array(z.number()),
-                })),
+                })).optional(),
                 height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
                 shape: z.enum(['polygon', 'circle']).optional(),
+                dataSource: DataSourceSchema.optional(),
             }),
-            description: 'A real ECharts radar chart. Supports multiple series comparison on multiple dimensions.',
+            description: 'A real ECharts radar chart. Supports multiple series comparison on multiple dimensions. Use dataSource for dynamic data fetching.',
         },
 
         GaugeChart: {
             props: z.object({
                 title: z.string().optional(),
-                value: z.number(),
+                value: z.number().optional(),
                 min: z.number().optional(),
                 max: z.number().optional(),
                 unit: z.string().optional(),
                 height: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
                 color: z.enum(['blue', 'green', 'red', 'amber', 'auto']).optional(),
+                dataSource: DataSourceSchema.optional(),
             }),
-            description: 'A real ECharts gauge chart for displaying a single metric value with progress arc.',
+            description: 'A real ECharts gauge chart for displaying a single metric value with progress arc. Use dataSource for dynamic data fetching.',
         },
 
         StatusDot: {

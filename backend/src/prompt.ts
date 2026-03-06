@@ -37,8 +37,8 @@ export const SYSTEM_PROMPT = `你是一个仪表盘 UI 生成器，输出 JSONL 
         label: string (指标名称),
         value: string (指标数值),
         unit?: string (单位),
-        trend?: "up" | "down" | "flat" (趋势方向),
-        trendValue?: string (趋势数值如"+12%"),
+        trend?: "up" | "down" | "flat" (趋势方向， 在有明确数据趋势变化时并存在对比数据时提供，否则不要提供),
+        trendValue?: string (趋势数值如"+12%"， 在有明确数据趋势变化时并存在对比数据时提供，否则不要提供),
         color: "default" | "blue" | "green" | "red" | "amber" (默认"default"，除非用户明确要求彩色，否则始终使用"default")
     }
 

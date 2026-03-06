@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import * as echarts from 'echarts/core'
 import { BarChart as EBarChart } from 'echarts/charts'
 import {
@@ -9,8 +9,9 @@ import {
 import { SVGRenderer } from 'echarts/renderers'
 import clsx from 'clsx'
 import type { BaseComponentProps } from '@json-render/react'
-import { ChartSkeleton } from './chart-skeleton'
+import { UniversalChartPlaceholder } from './universal-chart-placeholder'
 import type { DataSourceConfig, ChartSeriesData } from '@/context/data-context'
+import { dashboardStore, selectors } from '@/store/dashboard-store'
 
 echarts.use([EBarChart, GridComponent, TooltipComponent, LegendComponent, SVGRenderer])
 
@@ -85,6 +86,22 @@ export function BarChart({ props }: BaseComponentProps<BarChartProps>) {
         if (needsDynamicData) {
             fetchDynamicData()
         }
+    }, [needsDynamicData, fetchDynamicData])
+
+    // 监听全局刷新触发器
+    useEffect(() => {
+        if (!needsDynamicData) return
+
+        const unsubscribe = dashboardStore.subscribe(
+            selectors.refreshTrigger,
+            (timestamp) => {
+                if (timestamp > 0) {
+                    fetchDynamicData()
+                }
+            }
+        )
+
+        return unsubscribe
     }, [needsDynamicData, fetchDynamicData])
 
     // 自动刷新
@@ -170,89 +187,47 @@ export function BarChart({ props }: BaseComponentProps<BarChartProps>) {
         }
     }, [hasData, xAxis, series, props.horizontal, props.stack])
 
-    // 决定渲染内容
-    const renderContent = useMemo(() => {
-        if (isLoading) {
-            return (
-                <ChartSkeleton
-                    title={props.title}
-                    height={props.height || 'md'}
-                    chartType="bar"
-                    onRefresh={fetchDynamicData}
-                />
-            )
-        }
+    // 统一的卡片容器 - 内容区域高度固定，避免切换时抖动
+    const containerHeight = heightMap[props.height || 'md']
 
-        if (error) {
-            return (
-                <ChartSkeleton
-                    title={props.title}
-                    height={props.height || 'md'}
-                    chartType="bar"
-                    error={error}
-                    onRefresh={fetchDynamicData}
-                />
-            )
-        }
-
-        if (!hasData) {
-            return (
-                <ChartSkeleton
-                    title={props.title}
-                    height={props.height || 'md'}
-                    chartType="bar"
-                    onRefresh={fetchDynamicData}
-                />
-            )
-        }
-
-        return (
-            <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
-                {props.title && (
-                    <div className="border-b border-zinc-100 px-4 py-3 flex items-center justify-between">
-                        <h4 className="text-xs font-semibold text-zinc-800">{props.title}</h4>
-                        {props.dataSource && (
-                            <button
-                                onClick={fetchDynamicData}
-                                className="p-1 rounded hover:bg-zinc-100 transition-colors group"
-                                title="刷新数据"
-                            >
-                                <svg
-                                    className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-600 transition-colors"
-                                    viewBox="0 0 14 14"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M2 7a5 5 0 0 1 8.5-3.5M12 7a5 5 0 0 1-8.5 3.5"
-                                        stroke="currentColor"
-                                        strokeWidth="1.2"
-                                        strokeLinecap="round"
-                                    />
-                                    <path
-                                        d="M10 2h2.5M10 2v2.5"
-                                        stroke="currentColor"
-                                        strokeWidth="1.2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path
-                                        d="M4 12H1.5M4 12v-2.5"
-                                        stroke="currentColor"
-                                        strokeWidth="1.2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            </button>
-                        )}
+    return (
+        <div className="group relative rounded-lg bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)] ring-1 ring-zinc-950/4 transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.04)]">
+            {props.title && (
+                <div className="relative px-4 py-3.5">
+                    <div className="flex items-start gap-2.5">
+                        <div className={clsx(
+                            'mt-0.75 h-3.5 w-0.75 shrink-0 rounded-full bg-linear-to-b',
+                            error ? 'from-red-300 to-red-400/60' : 'from-indigo-400 to-indigo-500/60'
+                        )} />
+                        <h3 className="text-[13px] font-semibold tracking-[-0.01em] text-zinc-800">
+                            {props.title}
+                        </h3>
                     </div>
-                )}
-                <div className={clsx('w-full p-4', heightMap[props.height || 'md'])}>
-                    <div ref={chartRef} className="w-full h-full" />
+                    <div className={clsx(
+                        'absolute bottom-0 left-4 right-4 h-px bg-linear-to-r',
+                        error ? 'from-red-200/60 via-red-100/30 to-transparent' : 'from-zinc-200/80 via-zinc-200/40 to-transparent'
+                    )} />
+                </div>
+            )}
+            <div className="px-4 py-3.5">
+                <div className={clsx('w-full relative', containerHeight)}>
+                    {/* 图表容器 - 始终存在，无数据时隐藏 */}
+                    <div
+                        ref={chartRef}
+                        className={clsx('w-full h-full', (isLoading || error || !hasData) && 'hidden')}
+                    />
+                    {/* 占位符 - 加载/错误/无数据时显示 */}
+                    {(isLoading || error || !hasData) && (
+                        <div className="absolute inset-0">
+                            <UniversalChartPlaceholder
+                                height={props.height || 'md'}
+                                isLoading={isLoading}
+                                error={error}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
-        )
-    }, [isLoading, error, hasData, props.title, props.height, props.dataSource, fetchDynamicData])
-
-    return renderContent
+        </div>
+    )
 }

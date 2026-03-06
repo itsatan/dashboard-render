@@ -226,9 +226,9 @@ function EmptyPlaceholder() {
                 className="absolute inset-0 opacity-[0.03]"
                 style={{
                     backgroundImage: `
-            linear-gradient(to right, #71717a 1px, transparent 1px),
-            linear-gradient(to bottom, #71717a 1px, transparent 1px)
-          `,
+                linear-gradient(to right, #71717a 1px, transparent 1px),
+                linear-gradient(to bottom, #71717a 1px, transparent 1px)
+            `,
                     backgroundSize: '24px 24px',
                 }}
             />
